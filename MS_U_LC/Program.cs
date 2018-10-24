@@ -1,12 +1,12 @@
-﻿using System;
-
-namespace LoanCalculator
+﻿namespace LoanCalculator
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main() => new Program().Run();
+
+        private void Run()
         {
-            Console.WriteLine("Hello World!");
+            
         }
     }
 }
