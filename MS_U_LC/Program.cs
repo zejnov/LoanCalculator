@@ -55,13 +55,24 @@ namespace LoanCalculator
                 LoanInstallmentAmount = singleInstallment
             };
 
-            CalculateParts(calculatedResult);
+            CalculateInstallments(calculatedResult, q);
 
             return calculatedResult;
         }
 
-        private void CalculateParts(ResultWrapper calculatedResult)
+        private void CalculateInstallments(ResultWrapper calculatedResult, double q)
         {
+            for (var i = 1; i <= calculatedResult.InputData.LoanTerm; i++)
+            {
+                var rataKapitalowa = calculatedResult.InputData.LoanAmount * (decimal) q / ((decimal) Math.Pow(1 + q, i) - 1);
+
+
+            }
+            
+            
+            
+            
+            //todo remove
             calculatedResult.LoanPlan = new List<ResultRow>()
             {
                 new ResultRow()
