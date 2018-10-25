@@ -114,26 +114,6 @@ namespace LoanCalculator
 
                 resultWrapper.LoanPlan.Add(resultRow);
             }
-            
-            
-            //todo remove
-            resultWrapper.LoanPlan = new List<ResultRow>()
-            {
-                new ResultRow()
-                {
-                    MonthNumber = 1,
-                    LoanPayment = new LoanData()
-                    {
-                        CapitalPart = 123,
-                        InterestPart = 23
-                    },
-                    LoanOutstanding = new LoanData()
-                    {
-                        CapitalPart = 20000,
-                        InterestPart = 12456
-                    }
-                }
-            };
         }
 
         private void PrintResults(ResultWrapper result)
