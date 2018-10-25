@@ -7,5 +7,7 @@ namespace LoanCalculator.Model
         public int LoanTerm { get; set; }
 
         public double AnnualInterestRateValue => AnnualInterestRate / 100;
+        public decimal InterestAmount => LoanAmount + LoanAmount * (decimal)AnnualInterestRateValue;
+
     }
 }

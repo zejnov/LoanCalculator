@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using LoanCalculator.Const;
 using LoanCalculator.Helpers;
 using LoanCalculator.Model;
@@ -60,20 +61,63 @@ namespace LoanCalculator
             return calculatedResult;
         }
 
-        private void CalculateInstallments(ResultWrapper calculatedResult, double q)
+        private void CalculateInstallments(ResultWrapper resultWrapper, double q)
         {
-            for (var i = 1; i <= calculatedResult.InputData.LoanTerm; i++)
+            resultWrapper.LoanPlan = new List<ResultRow>();
+            resultWrapper.CurrentLoanAmount = resultWrapper.InputData.LoanAmount; //todo dodać tu odsetki
+            
+            
+            for (var i = 1; i <= resultWrapper.InputData.LoanTerm; i++)
             {
-                var rataKapitalowa = calculatedResult.InputData.LoanAmount * (decimal) q / ((decimal) Math.Pow(1 + q, i) - 1);
+                var resultRow = new ResultRow()
+                {
+                    MonthNumber = i
+                };
+                
+                var rataKapitalowa = resultWrapper.InputData.LoanAmount * (decimal) q / ((decimal) Math.Pow(1 + q, i) - 1);
+                var rataProcentowa = resultWrapper.LoanInstallmentAmount - rataKapitalowa;
 
+                resultRow.LoanPayment = new LoanData()
+                {
+                    CapitalPart = rataKapitalowa,
+                    InterestPart = rataProcentowa
+                };
 
+                resultWrapper.CurrentLoanAmount -= resultRow.LoanPayment.Sum; //todo remove
+
+                var capitalTotal = resultWrapper.InputData.LoanAmount;
+                var interestTotal = resultWrapper.InputData.InterestAmount;
+
+                var lastCapital = resultWrapper.LoanPlan.LastOrDefault()?.LoanOutstanding.CapitalPart;
+                if (lastCapital == null)
+                {
+                    lastCapital = resultWrapper.InputData.LoanAmount;
+                }
+                
+                var lastInterest = resultWrapper.LoanPlan.LastOrDefault()?.LoanOutstanding.InterestPart;
+                if (lastInterest == null)
+                {
+                    lastInterest = resultWrapper.InputData.InterestAmount;
+                }
+                
+                resultRow.LoanOutstanding = new LoanData()
+                {
+                    CapitalPart =  lastCapital.Value - rataKapitalowa,
+                    InterestPart = lastCapital.Value - rataProcentowa
+                        
+                };
+                
+                //debugg
+                var sth = resultRow.LoanOutstanding.Sum - (resultWrapper.InputData.LoanAmount + resultWrapper.InputData.InterestAmount);
+                
+                //////
+
+                resultWrapper.LoanPlan.Add(resultRow);
             }
             
             
-            
-            
             //todo remove
-            calculatedResult.LoanPlan = new List<ResultRow>()
+            resultWrapper.LoanPlan = new List<ResultRow>()
             {
                 new ResultRow()
                 {
