@@ -4,5 +4,6 @@ namespace LoanCalculator.Model
     {
         public decimal CapitalPart { get; set; }
         public decimal InterestPart { get; set; }
+        public decimal Sum => CapitalPart + InterestPart;
     }
 }

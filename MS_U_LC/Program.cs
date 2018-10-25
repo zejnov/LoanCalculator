@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LoanCalculator.Const;
 using LoanCalculator.Helpers;
 using LoanCalculator.Model;
@@ -13,9 +14,8 @@ namespace LoanCalculator
         {
             var inputData = CollectData();
             PrintInputData(inputData);
-            CalculateData(inputData);
-//            PrintResults();
-            
+            var result = CalculateData(inputData);
+            PrintResults(result);
         }
 
         private void PrintInputData(InputData inputData)
@@ -55,21 +55,37 @@ namespace LoanCalculator
                 LoanInstallmentAmount = singleInstallment
             };
 
-            CalclulateParts(calculatedResult);
+            CalculateParts(calculatedResult);
 
             return calculatedResult;
         }
 
-        private void CalclulateParts(ResultWrapper calculatedResult)
+        private void CalculateParts(ResultWrapper calculatedResult)
         {
-            throw new NotImplementedException();
+            calculatedResult.LoanPlan = new List<ResultRow>()
+            {
+                new ResultRow()
+                {
+                    MonthNumber = 1,
+                    LoanPayment = new LoanData()
+                    {
+                        CapitalPart = 123,
+                        InterestPart = 23
+                    },
+                    LoanOutstanding = new LoanData()
+                    {
+                        CapitalPart = 20000,
+                        InterestPart = 12456
+                    }
+                }
+            };
         }
 
-        private void PrintResults()
+        private void PrintResults(ResultWrapper result)
         {
-            throw new System.NotImplementedException();
+            //todo Write input params
+            Writer.WriteResultTable(result);
+            //todo Write some footer
         }
-
-        
     }
 }

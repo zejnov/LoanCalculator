@@ -11,6 +11,19 @@ namespace LoanCalculator.Helpers
             Wait();
         }
 
+        public static void WriteResultTable(ResultWrapper result)
+        {
+            //PrintHeader();
+
+            foreach (var entry in result.LoanPlan)
+            {
+                Console.WriteLine($" {entry.MonthNumber}  {result.LoanInstallmentAmount:0.##}({entry.LoanPayment.CapitalPart}/{entry.LoanPayment.InterestPart})  " +
+                                  $"{entry.LoanOutstanding.Sum}({entry.LoanOutstanding.CapitalPart}/{entry.LoanOutstanding.InterestPart})");
+            }
+            //PrintFooter
+            Wait();
+        }
+
         private static void Wait()
         {
             Console.ReadKey(false);
