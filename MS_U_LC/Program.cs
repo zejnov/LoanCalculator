@@ -56,8 +56,6 @@ namespace LoanCalculator
 
         private void CalculateInstallments(ResultWrapper resultWrapper)
         {
-            resultWrapper.LoanPlan = new List<ResultRow>();
-            
             var p = resultWrapper.InputData.AnnualInterestRate / (LoanConst.NUMBER_OF_CAMPITALIZATION_PERIODS * 100);
             var toPower = resultWrapper.InputData.LoanTerm;
             
@@ -65,32 +63,26 @@ namespace LoanCalculator
             
             var capitalPart = resultWrapper.InputData.LoanAmount/resultWrapper.InputData.LoanTerm;
             var interestPart = interest - capitalPart;
-            
             var interestTotal = interest * resultWrapper.InputData.LoanTerm - resultWrapper.InputData.LoanAmount;
             
+            resultWrapper.LoanPlan = new List<ResultRow>();
+
             for (var i = 1; i <= resultWrapper.InputData.LoanTerm; i++)
             {
-                var resultRow = new ResultRow()
+                resultWrapper.LoanPlan.Add(new ResultRow()
                 {
                     MonthNumber = i,
                     LoanPayment = new LoanData()
                     {
                         CapitalPart = capitalPart,
                         InterestPart = interestPart
+                    },
+                    LoanOutstanding = new LoanData()
+                    {
+                        CapitalPart = (resultWrapper.LoanPlan.LastOrDefault()?.LoanOutstanding.CapitalPart ?? resultWrapper.InputData.LoanAmount) - capitalPart,
+                        InterestPart = (resultWrapper.LoanPlan.LastOrDefault()?.LoanOutstanding.InterestPart ?? interestTotal) - interestPart
                     }
-                };
-                
-                var lastCapital = resultWrapper.LoanPlan.LastOrDefault()?.LoanOutstanding.CapitalPart ?? resultWrapper.InputData.LoanAmount;
-
-                var lastInterest = resultWrapper.LoanPlan.LastOrDefault()?.LoanOutstanding.InterestPart ?? interestTotal;
-
-                resultRow.LoanOutstanding = new LoanData()
-                {
-                    CapitalPart =  lastCapital - capitalPart,
-                    InterestPart = lastInterest - interestPart
-                };
-
-                resultWrapper.LoanPlan.Add(resultRow);
+                });
             }
         }
 
