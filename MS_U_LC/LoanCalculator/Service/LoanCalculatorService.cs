@@ -1,47 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LoanCalculator.Const;
-using LoanCalculator.Helpers;
 using LoanCalculator.Model;
 
-namespace LoanCalculator
+namespace LoanCalculator.Service
 {
-    class Program
+    public class LoanCalculatorService
     {
-        static void Main() => new Program().Run();
-
-        private void Run()
-        {
-            //var inputData = CollectData();
-            var inputData = new InputData()
-            {
-                LoanAmount = 18000,
-                AnnualInterestRate = 18,
-                LoanTerm = 24
-            };
-            
-            var result = CalculateData(inputData);
-            PrintResults(result);
-        }
-
-        private void PrintInputData(InputData inputData)
-        {
-            //test purposes
-            Writer.WriteInput(inputData);
-        }
-
-        private InputData CollectData()
-        {
-            return new InputData
-            {
-                LoanAmount = Reader.ReadInput<decimal>("Loan amount"),
-                AnnualInterestRate = Reader.ReadInput<int>("Annual interest rate"),
-                LoanTerm = Reader.ReadInput<int>("Loan term (months)")
-            };
-        }
-        
-        private ResultWrapper CalculateData(InputData inputData)
+        public ResultWrapper CalculateData(InputData inputData)
         {
             var resultWrapper = new ResultWrapper()
             {
@@ -83,14 +50,6 @@ namespace LoanCalculator
                     }
                 });
             }
-        }
-
-        private void PrintResults(ResultWrapper result)
-        {
-            Writer.WriteInput(result.InputData);
-            Writer.WriteLoanInfo(result);
-            Writer.WriteResultTable(result);
-            //todo Write some footer
         }
     }
 }
