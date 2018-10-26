@@ -21,7 +21,6 @@ namespace LoanCalculator
                 LoanTerm = 24
             };
             
-            PrintInputData(inputData);
             var result = CalculateData(inputData);
             PrintResults(result);
         }
@@ -60,15 +59,15 @@ namespace LoanCalculator
             var toPower = resultWrapper.InputData.LoanTerm;
             
             var interest = resultWrapper.InputData.LoanAmount * (decimal) p * (decimal) Math.Pow(1 + p, toPower) / ((decimal) Math.Pow(1 + p, toPower) - 1) ;
-            
-            var capitalPart = resultWrapper.InputData.LoanAmount/resultWrapper.InputData.LoanTerm;
-            var interestPart = interest - capitalPart;
             var interestTotal = interest * resultWrapper.InputData.LoanTerm - resultWrapper.InputData.LoanAmount;
             
             resultWrapper.LoanPlan = new List<ResultRow>();
 
             for (var i = 1; i <= resultWrapper.InputData.LoanTerm; i++)
             {
+                var capitalPart = interest / ((decimal) Math.Pow(1 + p, i));
+                var interestPart = interest - capitalPart;
+                
                 resultWrapper.LoanPlan.Add(new ResultRow()
                 {
                     MonthNumber = i,
@@ -88,7 +87,8 @@ namespace LoanCalculator
 
         private void PrintResults(ResultWrapper result)
         {
-            //todo Write input params
+            Writer.WriteInput(result.InputData);
+            Writer.WriteLoanInfo(result);
             Writer.WriteResultTable(result);
             //todo Write some footer
         }
