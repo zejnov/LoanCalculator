@@ -16,9 +16,9 @@ namespace LoanCalculator
             //var inputData = CollectData();
             var inputData = new InputData()
             {
-                LoanAmount = 3200,
-                AnnualInterestRate = 8,
-                LoanTerm = 13
+                LoanAmount = 18000,
+                AnnualInterestRate = 18,
+                LoanTerm = 24
             };
             
             PrintInputData(inputData);
@@ -59,14 +59,14 @@ namespace LoanCalculator
             resultWrapper.LoanPlan = new List<ResultRow>();
             
             var p = resultWrapper.InputData.AnnualInterestRate / (LoanConst.NUMBER_OF_CAMPITALIZATION_PERIODS * 100);
+            var toPower = resultWrapper.InputData.LoanTerm;
             
-            var rataKapitalowa = (resultWrapper.InputData.LoanAmount * (decimal) p) / ((decimal) Math.Pow(1 + p, resultWrapper.InputData.LoanTerm) - 1);
-            var rataStala = rataKapitalowa * (decimal) Math.Pow(1 + p, resultWrapper.InputData.LoanTerm);
-            var rataProcentowa = rataStala - rataKapitalowa;
-
-            var doSplatyTotal = rataStala * resultWrapper.InputData.LoanTerm;
-            var odsetki = doSplatyTotal - resultWrapper.InputData.LoanAmount;
-            var tefst = rataProcentowa * resultWrapper.InputData.LoanTerm;
+            var interest = resultWrapper.InputData.LoanAmount * (decimal) p * (decimal) Math.Pow(1 + p, toPower) / ((decimal) Math.Pow(1 + p, toPower) - 1) ;
+            
+            var capitalPart = resultWrapper.InputData.LoanAmount/resultWrapper.InputData.LoanTerm;
+            var interestPart = interest - capitalPart;
+            
+            var interestTotal = interest * resultWrapper.InputData.LoanTerm - resultWrapper.InputData.LoanAmount;
             
             for (var i = 1; i <= resultWrapper.InputData.LoanTerm; i++)
             {
@@ -75,28 +75,20 @@ namespace LoanCalculator
                     MonthNumber = i,
                     LoanPayment = new LoanData()
                     {
-                        CapitalPart = rataKapitalowa,
-                        InterestPart = rataProcentowa
+                        CapitalPart = capitalPart,
+                        InterestPart = interestPart
                     }
                 };
                 
                 var lastCapital = resultWrapper.LoanPlan.LastOrDefault()?.LoanOutstanding.CapitalPart ?? resultWrapper.InputData.LoanAmount;
 
-                var lastInterest = resultWrapper.LoanPlan.LastOrDefault()?.LoanOutstanding.InterestPart ?? odsetki;
+                var lastInterest = resultWrapper.LoanPlan.LastOrDefault()?.LoanOutstanding.InterestPart ?? interestTotal;
 
                 resultRow.LoanOutstanding = new LoanData()
                 {
-                    CapitalPart =  lastCapital - rataKapitalowa,
-                    InterestPart = lastInterest - rataProcentowa
+                    CapitalPart =  lastCapital - capitalPart,
+                    InterestPart = lastInterest - interestPart
                 };
-
-
-                var test = resultRow.LoanOutstanding.Sum - (lastCapital + lastInterest);
-                
-                //debugg
-                var sth = resultRow.LoanOutstanding.Sum - (resultWrapper.InputData.LoanAmount + resultWrapper.InputData.InterestAmount);
-                
-                //////
 
                 resultWrapper.LoanPlan.Add(resultRow);
             }
