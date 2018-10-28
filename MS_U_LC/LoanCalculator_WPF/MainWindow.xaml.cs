@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using LoanCalculator.Model;
+using LoanCalculator.Service;
 
 namespace LoanCalculator_WPF
 {
@@ -21,6 +22,13 @@ namespace LoanCalculator_WPF
                 AnnualInterestRate = double.Parse(PercentageTxt.Text),
                 LoanTerm = int.Parse(TermTxt.Text)
             };
+
+            var calculator = new LoanCalculatorService();
+            var result = calculator.CalculateData(inputData);
+
+            tableResult.Visibility = Visibility.Visible;
+
+            tableResult.va
         }
     }
 }

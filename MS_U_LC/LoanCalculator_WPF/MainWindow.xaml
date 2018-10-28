@@ -23,7 +23,7 @@
         <Label Content="Loan amount" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top"/>
         <Label Content="Interest rate" HorizontalAlignment="Left" Margin="205,25,0,0" VerticalAlignment="Top"/>
         <Label Content="Loan term" HorizontalAlignment="Left" Margin="387,25,0,0" VerticalAlignment="Top"/>
-        <ListView HorizontalAlignment="Left" Height="162" Margin="67,130,0,0" VerticalAlignment="Top" Width="389">
+        <ListView HorizontalAlignment="Left" Height="162" Margin="62,131,0,0" VerticalAlignment="Top" Width="389" Visibility="Hidden" AutomationProperties.Name="tableResult">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
