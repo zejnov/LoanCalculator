@@ -7,4 +7,5 @@ Kwota kredytu, Roczne oprocentowanie, Okres kredytowania w miesiącach.
 Wyniki powinny być przedstawione w formie tabeli i zawierać następujące informacje:
 Numer miesiąca, wysokość raty (część kapitałowa, część odsetkowa), pozostało do spłaty (kapitał, odsetki)
 
+
 */
