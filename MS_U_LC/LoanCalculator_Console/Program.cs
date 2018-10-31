@@ -11,13 +11,7 @@ namespace LoanCalculator_Console
         private void Run()
         {
             var service = new LoanCalculatorService();
-            //var inputData = CollectData();            //TODO enable
-            var inputData = new InputData()
-            {
-                LoanAmount = 18000,
-                AnnualInterestRate = 18,
-                LoanTerm = 24
-            };
+            var inputData = CollectData();
             
             var result = service.CalculateData(inputData);
             PrintResults(result);
@@ -25,7 +19,7 @@ namespace LoanCalculator_Console
 
         private InputData CollectData()
         {
-            //TODO add try catch
+            //TODO add try catch, validation of range
             return new InputData
             {
                 LoanAmount = Reader.ReadInput<decimal>("Loan amount"),
